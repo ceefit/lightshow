@@ -1,0 +1,124 @@
+  <!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="2021 Noor Lane Lights">
+  <meta property="og:image" content="https://lights.killr.io/title-card.png">
+
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="apple-touch-icon" href="icon.png">
+  <!-- Place favicon.ico in the root directory -->
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/button.css">
+
+
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="popup">
+      <div class="popup-content" style="display: block;">
+        <h2 class="popup-title" >Welcome to the 2021 Noor Lane Light Show!</h2>
+
+        <p class="popup-body" id="messageArea">Turn your radio to <b>104.5FM</b></p>
+
+        <div class="popup-body" style="margin-top: -7em;">
+          <a class="btn" href="#" onclick="return submit()">
+            <div id="label">Loading...
+            </div>
+          </a>
+        </div>
+        <div class="cookie-policy">
+          Our site doesn't use cookies (we saved them for Santa)
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script>
+    var ready = false;
+    var isStarting = false;
+    const api_host = "https://lights.killr.io"
+    function checkStatus() {
+      var xmlhttp = new XMLHttpRequest();
+      var url = api_host + "/api2/status";
+
+      if (isStarting == true) {
+        document.getElementById("label").innerHTML = "Show Starting, please wait...";
+      }
+
+      xmlhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+              var myArr = JSON.parse(this.responseText);
+
+              if (myArr.status == "ready" && !isStarting) {
+                ready = true;
+                document.getElementById("label").innerHTML = "Start the show";
+                document.getElementById("messageArea").innerHTML = "Turn your radio to <b>104.5FM";
+
+
+              } else if (myArr.status == "ready" && isStarting) {
+                document.getElementById("label").innerHTML = "Show Starting, please wait...";
+
+              } else if (myArr.status == "off") {
+                ready = false;
+                document.getElementById("messageArea").innerHTML = "Showtime is 5-11pm. Check back soon!";
+                document.getElementById("label").innerHTML = "Next Show Starts in: " + myArr.time_remaining;
+              } else {
+                ready = false;
+                isStarting = false;
+                document.getElementById("label").innerHTML = "Time remaining: " + myArr.time_remaining;
+              }
+          }
+      };
+      xmlhttp.open("GET", url, true);
+      xmlhttp.send();
+    }
+
+    function submit() {
+      if (ready) {
+        ready = false;
+        isStarting = true;
+        document.getElementById("label").innerHTML = "Show Starting, please wait...";
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+        };
+        xhttp.open("GET", api_host + "/api2/start_show", true);
+        xhttp.send();
+      }
+    }
+
+    function ping() {
+        ready = false;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+        };
+        xhttp.open("GET", api_host + "/api2/hit", true);
+        xhttp.send();
+    }
+    ping();
+    setInterval(function(){ checkStatus(); }, 1000);
+
+
+  </script>
+
+
+  <!-- Add your site or application content here -->
+  <script src="js/vendor/modernizr-3.11.2.min.js"></script>
+  <script src="js/plugins.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+
+</html>

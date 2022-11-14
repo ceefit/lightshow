@@ -1,0 +1,102 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="2020 Noor Lane Lights">
+  <meta property="og:image" content="http://lights.killr.io/title-card.png">
+
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="apple-touch-icon" href="icon.png">
+  <!-- Place favicon.ico in the root directory -->
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/button.css">
+
+
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="popup">
+      <div class="popup-content" style="display: block;">
+        <h2 class="popup-title" >Welcome to the 2020 Noor Lane Light Show!</h2>
+
+        <p class="popup-body">Turn your radio to <b>104.5FM</b></p>
+
+        <div class="popup-body" style="margin-top: -7em;">
+          <a class="btn" href="#" onclick="return submit()">
+            <div id="label">
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script>
+    var ready = false;
+
+    function checkStatus() {
+      var xmlhttp = new XMLHttpRequest();
+      var url = "http://lights.killr.io/api2/status";
+
+      xmlhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+              var myArr = JSON.parse(this.responseText);
+              if (myArr.status == "ready") {
+                ready = true;
+                document.getElementById("label").innerHTML = "Start the show";
+              } else {
+                ready = false;
+                document.getElementById("label").innerHTML = myArr.time_remaining;
+              }
+          }
+      };
+      xmlhttp.open("GET", url, true);
+      xmlhttp.send();  
+    }
+
+    function submit() {
+      if (ready) {
+        ready = false;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+        };
+        xhttp.open("GET", "http://lights.killr.io/api2/start_show", true);
+        xhttp.send();
+      }
+    }
+
+    function ping() {
+        ready = false;
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+        };
+        xhttp.open("GET", "http://lights.killr.io/api2/hit", true);
+        xhttp.send();
+    }
+    ping();
+    setInterval(function(){ checkStatus(); }, 1000);
+
+
+  </script> 
+
+
+  <!-- Add your site or application content here -->
+  <script src="js/vendor/modernizr-3.11.2.min.js"></script>
+  <script src="js/plugins.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+
+</html>
