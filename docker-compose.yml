@@ -1,0 +1,42 @@
+version: '3.9'
+services:
+
+  mobile-webapp:
+    image: node:17
+    restart: unless-stopped
+    hostname: mobile-webapp
+    network_mode: "host"
+    volumes:
+      - ./mobile-webapp:/mobile-webapp
+    working_dir: '/mobile-webapp'
+    env_file:
+      - ../lightshow/web-lights/.env
+    command: |
+      /bin/bash -c '
+      yarn install;
+      yarn run start'
+
+  api-proxy:
+    image: python:3.9.13-slim-buster
+    restart: unless-stopped
+    hostname: api-proxy
+    network_mode: "host"
+    volumes:
+      - ./api-proxy:/api-proxy
+    working_dir: '/api-proxy'
+    env_file:
+      - ../lightshow/web-lights/.env
+    command: |
+      /bin/bash -c '
+      pip install -r requirements.txt;
+      gunicorn api-proxy:create_app --bind 0.0.0.0:8081 --reload --workers 1 --threads 1 --worker-tmp-dir /dev/shm --worker-class aiohttp.GunicornWebWorker --timeout 900 --keep-alive 60'
+
+  nginx:
+    image: nginx:1.15-alpine
+    restart: unless-stopped
+    network_mode: "host"
+    ports:
+      - "1225:1225"
+    volumes:
+      - ./nginx.conf:/nginx/nginx.conf
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -c /nginx/nginx.conf -g \"daemon off;\"'"
