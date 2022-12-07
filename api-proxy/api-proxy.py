@@ -19,7 +19,7 @@ config = dotenv_values(dotenv_path)
 logger = Logger().get_logger("api-proxy")
 
 FPP_ADDRESS = "http://10.0.0.5"
-IGNORED_IPS = ["10.0.1.105", "10.0.1.136"]
+IGNORED_IPS = ["127.0.0.1", "10.0.1"]
 SERVICE_ENDPOINT = "/api"
 SHOW_PLAYLIST_NAME = "Carol of the Bells"
 PLAYLIST_SIZE = 4
@@ -135,7 +135,7 @@ async def create_app():
   app = web.Application(client_max_size=1024 * 8)
   app['client_session'] = aiohttp.ClientSession(connector=connector, timeout=client_timeout)
   cors = aiohttp_cors.setup(app, defaults={
-    "https://noorlanelights.show": aiohttp_cors.ResourceOptions(
+    f"https://{config['HOSTNAME']}": aiohttp_cors.ResourceOptions(
       allow_credentials=True,
       expose_headers="*",
       allow_headers="*"
