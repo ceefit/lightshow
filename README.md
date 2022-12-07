@@ -26,14 +26,21 @@ python3 virtualenv for the api-proxy and node for the mobile-webapp.
   sudo ln -s nginx.conf /etc/nginx/nginx.conf
   sudo systemctl restart nginx
   ```
-* Set up venv
+* Set up api-proxy
   ```bash
   cd api-proxy
   virtualenv venv
   source venv/bin/activate
   pip install -r requirements.txt
+  cd ..
   ```
 
+ * Set up mobile-webapp
+  ```bash
+  cd mobile-webapp
+  yarm install
+  cd ..
+  ```
 
 ## Running
 * Launch in two tmux windows
@@ -47,7 +54,7 @@ python3 virtualenv for the api-proxy and node for the mobile-webapp.
   (ctrl+b, arrow-key) # move to the other window in tmux
   cd mobile-webapp
   yarn start
-  (ctrl+b, d) # Detatch from tmux, now it's running in the background and can be resumed with `tmux att`
+  (ctrl+b, d) # Detach from tmux, now it's running in the background and can be resumed with `tmux att`
   ```
 
 ## SSL
