@@ -7,11 +7,14 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <meta property="og:title" content="2021 Noor Lane Lights">
-  <meta property="og:image" content="https://lights.killr.io/title-card.png">
 
-  <link rel="manifest" href="site.webmanifest">
-  <link rel="apple-touch-icon" href="icon.png">
+  <meta property="og:title" content="2022 Noor Lane Lights Show">
+  <meta property="og:image" content="https://noorlanelights.show/title-card.png?1">
+  <meta property="og:url" content="https://noorlanelights.show/">
+  <meta property="og:description" content="Start the animated music and lights show, on-demand!">
+
+  <link rel="manifest" href="public/site.webmanifest">
+  <link rel="apple-touch-icon" href="public/icon.png">
   <!-- Place favicon.ico in the root directory -->
 
   <link rel="stylesheet" href="css/normalize.css">
@@ -27,7 +30,7 @@
   <div class="container">
     <div class="popup">
       <div class="popup-content" style="display: block;">
-        <h2 class="popup-title" >Welcome to the 2021 Noor Lane Light Show!</h2>
+        <h2 class="popup-title" >Welcome to the 2022 Noor Lane Light Show!</h2>
 
         <p class="popup-body" id="messageArea">Turn your radio to <b>104.5FM</b></p>
 
@@ -36,6 +39,9 @@
             <div id="label">Loading...
             </div>
           </a>
+        </div>
+        <div class="video-embed">
+          <iframe width="auto" height="auto" src="https://www.youtube.com/embed/gz3W89PWipQ" title="2022 Noor Lane Lights Show - Trans Siberian Orchestra - Carol of the Bells" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         <div class="cookie-policy">
           Our site doesn't use cookies (we saved them for Santa)
@@ -49,10 +55,10 @@
   <script>
     var ready = false;
     var isStarting = false;
-    const api_host = "https://lights.killr.io"
+    const api_host = "https://noorlanelights.show"
     function checkStatus() {
       var xmlhttp = new XMLHttpRequest();
-      var url = api_host + "/api2/status";
+      var url = api_host + "/api/status";
 
       if (isStarting == true) {
         document.getElementById("label").innerHTML = "Show Starting, please wait...";
@@ -67,7 +73,6 @@
                 document.getElementById("label").innerHTML = "Start the show";
                 document.getElementById("messageArea").innerHTML = "Turn your radio to <b>104.5FM";
 
-
               } else if (myArr.status == "ready" && isStarting) {
                 document.getElementById("label").innerHTML = "Show Starting, please wait...";
 
@@ -75,6 +80,7 @@
                 ready = false;
                 document.getElementById("messageArea").innerHTML = "Showtime is 5-11pm. Check back soon!";
                 document.getElementById("label").innerHTML = "Next Show Starts in: " + myArr.time_remaining;
+
               } else {
                 ready = false;
                 isStarting = false;
@@ -94,7 +100,7 @@
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
         };
-        xhttp.open("GET", api_host + "/api2/start_show", true);
+        xhttp.open("GET", api_host + "/api/start_show", true);
         xhttp.send();
       }
     }
@@ -104,7 +110,7 @@
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
         };
-        xhttp.open("GET", api_host + "/api2/hit", true);
+        xhttp.open("GET", api_host + "/api/hit", true);
         xhttp.send();
     }
     ping();
@@ -113,8 +119,6 @@
 
   </script>
 
-
-  <!-- Add your site or application content here -->
   <script src="js/vendor/modernizr-3.11.2.min.js"></script>
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>
