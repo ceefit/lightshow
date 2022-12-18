@@ -19,10 +19,10 @@ config = dotenv_values(dotenv_path)
 logger = Logger().get_logger("api-proxy")
 
 FPP_ADDRESS = "http://10.0.0.5"
-IGNORED_IPS = ["10.0.1.105", "10.0.1.136"]
+IGNORED_IPS = ["10.0.1.105", "10.0.1.136", "127.0.0.1"]
 SERVICE_ENDPOINT = "/api"
 SHOW_PLAYLIST_NAME = "Carol of the Bells"
-PLAYLIST_SIZE = 4
+PLAYLIST_SIZE = 6
 
 
 async def health(request: web.Request):
@@ -117,11 +117,11 @@ async def start_show(request: Request):
       }
   if response['status'] != "busy":
     logger.info("The bells are not ringing, play it and notify")
-    await send_telegram_message(request.app, f"Show Started\n{request.headers.get('X-Forwarded-For')}")
     await insert_playlist(request.app)
+    await send_telegram_message(request.app, f"Show Started\n{request.headers.get('X-Forwarded-For')}")
   else:
     logger.info("The bells are ringing, do nothing")
-  return web.Response(body=json.dumps({"status": "busy", "time_remaining": "3:30"}))
+  return web.Response(body=json.dumps({"status": "busy", "time_remaining": parsed_payload['time_remaining']}))
 
 
 async def create_app():
