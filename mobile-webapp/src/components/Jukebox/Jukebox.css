@@ -1,0 +1,6 @@
+.jukebox-container {
+  background-color: rgba(66, 66, 66, 0.7) !important;
+  width: 80vw;
+  max-width: 80vw;
+  padding: 16px;
+}
